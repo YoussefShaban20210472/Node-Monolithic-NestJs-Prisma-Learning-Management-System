@@ -2,3 +2,4 @@ node_modules
 Storage
 .env*
 dist
+/generated/prisma
