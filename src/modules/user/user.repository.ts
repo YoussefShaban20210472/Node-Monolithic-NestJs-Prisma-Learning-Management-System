@@ -6,6 +6,9 @@ import type {
   UserUpdateInput,
 } from '../../../generated/prisma/models/User.js';
 
+const omit = {
+  password: true,
+};
 @Injectable()
 export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -13,9 +16,7 @@ export class UsersRepository {
   create(data: UserCreateInput) {
     return this.prisma.user.create({
       data,
-      omit: {
-        password: true,
-      },
+      omit,
     });
   }
 
@@ -26,24 +27,28 @@ export class UsersRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      omit,
     });
   }
 
   findById(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
+      omit,
     });
   }
 
   findByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
+      omit,
     });
   }
 
   findByPhoneNumber(phoneNumber: string) {
     return this.prisma.user.findUnique({
       where: { phoneNumber },
+      omit,
     });
   }
 
@@ -51,12 +56,14 @@ export class UsersRepository {
     return this.prisma.user.update({
       where: { id },
       data,
+      omit,
     });
   }
 
   delete(id: number) {
     return this.prisma.user.delete({
       where: { id },
+      omit,
     });
   }
 
