@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
-import { UsersModule } from './modules/user/user.module.js';
+import { UserModule } from './modules/user/user.module.js';
 import { APP_FILTER } from '@nestjs/core';
 import { PrismaExceptionFilter } from './common/filter/prisma-exception.filter.js';
+import { AuthModule } from './modules/auth/auth.module.js';
 
 @Module({
-  imports: [UsersModule],
+  imports: [UserModule, AuthModule],
   controllers: [AppController],
   providers: [
     AppService,

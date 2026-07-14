@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service.js';
+import { PrismaService } from '../../infrastructure/prisma/prisma.service.js';
 
 import type {
   UserCreateInput,
@@ -10,7 +10,7 @@ const omit = {
   password: true,
 };
 @Injectable()
-export class UsersRepository {
+export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(data: UserCreateInput) {
@@ -41,7 +41,7 @@ export class UsersRepository {
   findByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
-      omit,
+      // omit,
     });
   }
 

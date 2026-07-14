@@ -1,17 +1,34 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UsersRepository } from './user.repository.js';
+import { UserRepository } from './user.repository.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
-
+import { HashService } from '../../common/hash/hash.service.js';
 @Injectable()
-export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+export class UserService {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly hashService: HashService,
+  ) {}
 
-  create(dto: CreateUserDto) {
-    return this.usersRepository.create(dto);
+  async create(dto: CreateUserDto) {
+    const user = dto;
+
+    const hashedPassword = await this.hashService.hash(user.password);
+    user.password = hashedPassword;
+
+    return this.userRepository.create(user);
   }
 
   async findOne(id: number) {
-    const user = await this.usersRepository.findById(id);
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -21,6 +38,6 @@ export class UsersService {
   }
 
   findAll(page = 1, limit = 10) {
-    return this.usersRepository.findAll((page - 1) * limit, limit);
+    return this.userRepository.findAll((page - 1) * limit, limit);
   }
 }

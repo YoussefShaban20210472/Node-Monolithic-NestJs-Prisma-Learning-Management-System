@@ -7,26 +7,28 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { UsersService } from './user.service.js';
+import { UserService } from './user.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UserQueryDto } from './dto/user-query.dto.js';
+import { Role } from '../../common/enum/role.enum.js';
+import { Roles } from '../../common/decorator/roles.decorator.js';
 
 @Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
-
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+  @Roles(Role.ADMIN)
   @Post()
   create(@Body() dto: CreateUserDto) {
-    return this.usersService.create(dto);
+    return this.userService.create(dto);
   }
-
+  @Roles(Role.ADMIN)
   @Get()
   findAll(@Query() query: UserQueryDto) {
-    return this.usersService.findAll(query.page, query.limit);
+    return this.userService.findAll(query.page, query.limit);
   }
-
+  @Roles(Role.ADMIN)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+    return this.userService.findOne(id);
   }
 }
