@@ -1,4 +1,4 @@
-export type domainDateType = keyof {
+export type DomainDateType = keyof {
   startDate: string[];
   endDate: string[];
 };

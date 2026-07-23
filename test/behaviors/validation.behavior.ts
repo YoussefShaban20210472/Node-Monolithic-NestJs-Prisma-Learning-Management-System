@@ -1,0 +1,127 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { executeHttpRequest } from 'test/executors/http.executor.js';
+import { domainInvalidValues } from 'test/invalid-values/domain/domain-invalid-values.js';
+import { typeInvalidValues } from 'test/invalid-values/type/type-invalid-values.js';
+import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
+import { requiredFieldType } from 'test/types/required-field-type.js';
+import { RoleType } from 'test/types/role-type.js';
+import { expect, it } from 'vitest';
+
+export function shouldRejectMissingRequiredField(
+  httpRequestOptions: HttpRequestOptionsType,
+  roles: RoleType[],
+  fields: requiredFieldType[],
+) {
+  fields = fields.filter((field) => field.required);
+  if (fields.length === 0) return;
+  roles.forEach((role) => {
+    fields.forEach((field) => {
+      it(`Should reject missing required field (${field.name}) (${role.type})`, async () => {
+        const body = httpRequestOptions.getBody();
+        if (field.name in body) {
+          delete body[field.name];
+        }
+        httpRequestOptions.getBody = () => body;
+        const response = await executeHttpRequest(
+          httpRequestOptions,
+          role.getToken,
+        );
+        expect(response.status).toBe(400);
+      });
+    });
+  });
+}
+export function shouldRejectMissingRequiredFields(
+  httpRequestOptions: HttpRequestOptionsType,
+  roles: RoleType[],
+) {
+  roles.forEach((role) => {
+    it(`Should reject missing required fields (${role.type})`, async () => {
+      httpRequestOptions.getBody = () => ({});
+      const response = await executeHttpRequest(
+        httpRequestOptions,
+        role.getToken,
+      );
+      expect(response.status).toBe(400);
+    });
+  });
+}
+
+export function shouldRejectInvalidType(
+  httpRequestOptions: HttpRequestOptionsType,
+  roles: RoleType[],
+  fields: requiredFieldType[],
+) {
+  roles.forEach((role) => {
+    fields.forEach((field) => {
+      let invalidTypeValues: any[];
+      if (field.type && field.type in typeInvalidValues)
+        invalidTypeValues = typeInvalidValues[field.type];
+      else invalidTypeValues = typeInvalidValues.String;
+
+      invalidTypeValues.forEach((value) => {
+        it(`Should reject invalid type field:(${field.name}) value:(${value}) (${role.type})`, async () => {
+          const body = httpRequestOptions.getBody();
+          body[field.name] = value;
+
+          httpRequestOptions.getBody = () => body;
+          const response = await executeHttpRequest(
+            httpRequestOptions,
+            role.getToken,
+          );
+          expect(response.status).toBe(400);
+        });
+      });
+    });
+  });
+}
+export function shouldRejectNullAndUndefined(
+  httpRequestOptions: HttpRequestOptionsType,
+  roles: RoleType[],
+  fields: requiredFieldType[],
+) {
+  roles.forEach((role) => {
+    fields.forEach((field) => {
+      const invalidValues = [null, undefined];
+      invalidValues.forEach((value) => {
+        it(`Should reject ${value === null ? 'null' : 'undefined'} field:(${field.name}) value:(${value}) (${role.type})`, async () => {
+          const body = httpRequestOptions.getBody();
+          body[field.name] = value;
+          httpRequestOptions.getBody = () => body;
+          const response = await executeHttpRequest(
+            httpRequestOptions,
+            role.getToken,
+          );
+          expect(response.status).toBe(400);
+        });
+      });
+    });
+  });
+}
+
+export function shouldRejectInvalidDomain(
+  httpRequestOptions: HttpRequestOptionsType,
+  roles: RoleType[],
+  fields: requiredFieldType[],
+) {
+  roles.forEach((role) => {
+    fields.forEach((field) => {
+      let invalidDomainValues: any[] = [];
+      if (field.domain in typeInvalidValues)
+        invalidDomainValues = domainInvalidValues[field.domain];
+      invalidDomainValues.forEach((value) => {
+        it(`Should reject invalid domain field:(${field.name}) value:(${value}) (${role.type})`, async () => {
+          const body = httpRequestOptions.getBody();
+          body[field.name] = value;
+
+          httpRequestOptions.getBody = () => body;
+          const response = await executeHttpRequest(
+            httpRequestOptions,
+            role.getToken,
+          );
+          expect(response.status).toBe(400);
+        });
+      });
+    });
+  });
+}

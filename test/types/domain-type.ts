@@ -1,4 +1,4 @@
-export type domainType = keyof {
+export type DomainType = keyof {
   Name: string[];
   Email: string[];
   Role: string[];
