@@ -1,7 +1,6 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../src/app.module.js';
-
 export let app: INestApplication;
 
 export async function setup() {
@@ -10,6 +9,13 @@ export async function setup() {
   }).compile();
 
   app = moduleFixture.createNestApplication();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   await app.init();
 

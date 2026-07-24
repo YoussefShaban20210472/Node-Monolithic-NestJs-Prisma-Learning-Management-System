@@ -1,6 +1,6 @@
+import { app } from '../setup.js';
 import request, { type Response, type Test } from 'supertest';
-import { app } from 'test/setup.js';
-import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
+import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 
 export async function executeHttpRequest(
   { method, getUrl, getBody }: HttpRequestOptionsType,
@@ -13,5 +13,6 @@ export async function executeHttpRequest(
     req = req.set('Authorization', getToken());
   }
   const response = await req;
+  console.log(response.status, response.body);
   return { status: response.status, body: response.body };
 }

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { executeHttpRequest } from 'test/executors/http.executor.js';
-import { domainInvalidValues } from 'test/invalid-values/domain/domain-invalid-values.js';
-import { typeInvalidValues } from 'test/invalid-values/type/type-invalid-values.js';
-import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
-import { requiredFieldType } from 'test/types/required-field-type.js';
-import { RoleType } from 'test/types/role-type.js';
+import { executeHttpRequest } from '../executors/http.executor.js';
+import { domainInvalidValues } from '../invalid-values/domain/domain-invalid-values.js';
+import { typeInvalidValues } from '../invalid-values/type/type-invalid-values.js';
+import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
+import { requiredFieldType } from '../types/required-field-type.js';
+import { RoleType } from '../types/role-type.js';
 import { expect, it } from 'vitest';
 
 export function shouldRejectMissingRequiredField(
@@ -107,7 +107,7 @@ export function shouldRejectInvalidDomain(
   roles.forEach((role) => {
     fields.forEach((field) => {
       let invalidDomainValues: any[] = [];
-      if (field.domain in typeInvalidValues)
+      if (field.domain in domainInvalidValues)
         invalidDomainValues = domainInvalidValues[field.domain];
       invalidDomainValues.forEach((value) => {
         it(`Should reject invalid domain field:(${field.name}) value:(${value}) (${role.type})`, async () => {

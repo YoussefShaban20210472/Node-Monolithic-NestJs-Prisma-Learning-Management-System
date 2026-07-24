@@ -1,20 +1,25 @@
-import { executeHttpRequest } from 'test/executors/http.executor.js';
-import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
-import { requiredFieldType } from 'test/types/required-field-type.js';
-import { RoleType } from 'test/types/role-type.js';
+import { executeHttpRequest } from '../executors/http.executor.js';
+import {
+  HttpRequestOptionsForSuccessType,
+  HttpRequestOptionsType,
+} from '../types/http-request-options-type.js';
+import { requiredFieldType } from '../types/required-field-type.js';
+import { RoleType } from '../types/role-type.js';
 import { expect, it } from 'vitest';
 
 export function shouldAcceptValidRequest(
-  httpRequestOptions: HttpRequestOptionsType,
+  { method, getUrl, getBodies }: HttpRequestOptionsForSuccessType,
   roles: RoleType[],
 ) {
   roles.forEach((role) => {
-    it(`Should accept valid request (${role.type})`, async () => {
-      const response = await executeHttpRequest(
-        httpRequestOptions,
-        role.getToken,
-      );
-      expect(response.status).toBeOneOf([200, 201]);
+    getBodies.forEach((body) => {
+      it(`${body.getDescribeString(role.type.toLocaleLowerCase())}`, async () => {
+        const response = await executeHttpRequest(
+          { method, getUrl, getBody: body.getBody },
+          role.getToken,
+        );
+        expect(response.status).toBeOneOf([200, 201]);
+      });
     });
   });
 }

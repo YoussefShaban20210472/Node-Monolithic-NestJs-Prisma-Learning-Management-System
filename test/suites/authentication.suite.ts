@@ -3,8 +3,8 @@ import {
   shouldRejectInvalidToken,
   shouldRejectMalformedToken,
   shouldRejectMissingToken,
-} from 'test/behaviors/authentication.behavior.js';
-import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
+} from '../behaviors/authentication.behavior.js';
+import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 import { describe } from 'vitest';
 
 export function authenticationSuite(

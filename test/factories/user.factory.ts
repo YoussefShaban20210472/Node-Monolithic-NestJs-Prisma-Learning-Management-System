@@ -15,7 +15,7 @@ export function createRandomUser(role: string = 'admin') {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
     }),
-    phoneNumber: faker.string.numeric({ length: { min: 10, max: 15 } }),
+    phoneNumber: `+2011${faker.string.numeric({ length: { min: 8, max: 8 } })}`,
     password: 'Password@123',
     address: `${faker.string.numeric(3)} N. Cherry St.`,
     role: role.toLocaleUpperCase(),

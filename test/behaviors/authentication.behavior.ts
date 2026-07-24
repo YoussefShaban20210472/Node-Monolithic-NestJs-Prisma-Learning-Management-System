@@ -1,18 +1,18 @@
-import { executeHttpRequest } from 'test/executors/http.executor.js';
+import { executeHttpRequest } from '../executors/http.executor.js';
 import {
   expiredTokens,
   invalidTokens,
   malformedTokens,
-} from 'test/invalid-values/auth/auth-invalid-values.js';
-import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
+} from '../invalid-values/auth/auth-invalid-values.js';
+import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 import { expect, it } from 'vitest';
-
+const STATUS = 401;
 export function shouldRejectMissingToken(
   httpRequestOptions: HttpRequestOptionsType,
 ) {
   it('Should reject missing token', async () => {
     const response = await executeHttpRequest(httpRequestOptions);
-    expect(response.status).toBe(409);
+    expect(response.status).toBe(401);
   });
 }
 
@@ -25,7 +25,7 @@ export function shouldRejectInvalidToken(
         httpRequestOptions,
         () => token,
       );
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(STATUS);
     });
   });
 }
@@ -38,7 +38,7 @@ export function shouldRejectExpiredToken(
         httpRequestOptions,
         () => token,
       );
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(STATUS);
     });
   });
 }
@@ -51,7 +51,7 @@ export function shouldRejectMalformedToken(
         httpRequestOptions,
         () => token,
       );
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(STATUS);
     });
   });
 }

@@ -1,8 +1,8 @@
-import { executeHttpRequest } from 'test/executors/http.executor.js';
-import { HttpRequestOptionsType } from 'test/types/http-request-options-type.js';
-import { RoleType } from 'test/types/role-type.js';
+import { executeHttpRequest } from '../executors/http.executor.js';
+import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
+import { RoleType } from '../types/role-type.js';
 import { expect, it } from 'vitest';
-
+const STATUS = 403;
 export function shouldRejectForbiddenRole(
   httpRequestOptions: HttpRequestOptionsType,
   roles: RoleType[],
@@ -13,7 +13,7 @@ export function shouldRejectForbiddenRole(
         httpRequestOptions,
         role.getToken,
       );
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(STATUS);
     });
   });
 }
@@ -27,7 +27,7 @@ export function shouldRejectForbiddenAction(
         httpRequestOptions,
         role.getToken,
       );
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(STATUS);
     });
   });
 }
