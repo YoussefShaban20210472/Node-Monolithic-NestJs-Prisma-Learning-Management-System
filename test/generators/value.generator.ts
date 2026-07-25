@@ -289,7 +289,7 @@ export function generateRandomInvalidAddressStrings(
       part11,
     ];
     const address = parts.filter(() => Math.random() > 0.5);
-    if (address.length < 11) {
+    if (address.length < 10) {
       return address.join('');
     } else {
       return address.slice(1).join('');

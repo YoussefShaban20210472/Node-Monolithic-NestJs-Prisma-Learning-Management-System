@@ -52,7 +52,7 @@ export class UserRepository {
     });
   }
 
-  update(id: number, data: UserUpdateInput) {
+  updateById(id: number, data: UserUpdateInput) {
     return this.prisma.user.update({
       where: { id },
       data,
@@ -60,7 +60,7 @@ export class UserRepository {
     });
   }
 
-  delete(id: number) {
+  deleteById(id: number) {
     return this.prisma.user.delete({
       where: { id },
       omit,

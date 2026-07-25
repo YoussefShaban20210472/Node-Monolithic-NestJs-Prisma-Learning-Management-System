@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { createRandomUser } from '../factories/user.factory.js';
 import { executeHttpRequest } from '../executors/http.executor.js';
 import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 import { expect } from 'vitest';
@@ -20,27 +22,36 @@ export async function createUserAndGetId(user: object, adminToken: string) {
   const httpRequestOptions: HttpRequestOptionsType = {
     method: 'POST',
     getBody: () => user,
-    getUrl: () => '/user',
+    getUrl: () => '/users',
   };
   const response = await executeHttpRequest(
     httpRequestOptions,
-    () => adminToken,
+    () => `Bearer ${adminToken}`,
   );
-  expect(response.status).toBe(200);
-  return String(response.body.user.id);
+  expect(response.status).toBe(201);
+  return String(response.body.id);
 }
 export async function createRandomUserAndGetId(
   role: string,
   adminToken: string,
-) {}
+) {
+  const user = createRandomUser(role);
+  return await createUserAndGetId(user, adminToken);
+}
 
 export async function createUserAndLoginAndGetToken(
-  user: unknown,
+  user: object,
   adminToken: string,
-) {}
+) {
+  await createUserAndGetId(user, adminToken);
+  return await loginAndGetToken(user);
+}
 export async function createRandomUserAndLoginAndGetToken(
   role: string,
   adminToken: string,
-) {}
+) {
+  const user = createRandomUser(role);
+  return await createUserAndLoginAndGetToken(user, adminToken);
+}
 
 export async function getUserId(userToken: string) {}

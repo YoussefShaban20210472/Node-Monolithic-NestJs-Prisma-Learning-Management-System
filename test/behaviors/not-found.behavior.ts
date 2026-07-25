@@ -18,10 +18,9 @@ export function shouldRejectNotFoundIdInUrl(
           if (idRegex.test(part)) return '999999999';
           return part;
         })
-        .join('');
-      httpRequestOptions.getUrl = () => url;
+        .join('/');
       const response = await executeHttpRequest(
-        httpRequestOptions,
+        { ...httpRequestOptions, getUrl: () => url },
         role.getToken,
       );
       expect(response.status).toBe(404);
@@ -40,10 +39,8 @@ export function shouldRejectNotFoundIdInBody(
       it(`Should reject not found id (${field.name}) (${role.type})`, async () => {
         const body = httpRequestOptions.getBody();
         body[field.name] = '999999999';
-
-        httpRequestOptions.getBody = () => body;
         const response = await executeHttpRequest(
-          httpRequestOptions,
+          { ...httpRequestOptions, getBody: () => body },
           role.getToken,
         );
         expect(response.status).toBe(404);

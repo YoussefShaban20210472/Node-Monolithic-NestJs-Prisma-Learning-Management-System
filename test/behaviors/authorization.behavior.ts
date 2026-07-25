@@ -8,7 +8,7 @@ export function shouldRejectForbiddenRole(
   roles: RoleType[],
 ) {
   roles.forEach((role) => {
-    it(`Should reject unauthorized role (${role.type})`, async () => {
+    it(`Should reject forbidden role (${role.type})`, async () => {
       const response = await executeHttpRequest(
         httpRequestOptions,
         role.getToken,
@@ -22,7 +22,7 @@ export function shouldRejectForbiddenAction(
   roles: RoleType[],
 ) {
   roles.forEach((role) => {
-    it(`Should reject unauthorized role (${role.type})`, async () => {
+    it(`Should reject forbidden action (${role.type})`, async () => {
       const response = await executeHttpRequest(
         httpRequestOptions,
         role.getToken,

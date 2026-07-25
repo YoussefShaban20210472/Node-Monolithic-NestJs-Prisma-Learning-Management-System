@@ -12,18 +12,18 @@ export function shouldRejectMissingRequiredField(
   roles: RoleType[],
   fields: requiredFieldType[],
 ) {
-  fields = fields.filter((field) => field.required);
-  if (fields.length === 0) return;
+  const requiredFields = fields.filter((field) => field.required);
+  if (requiredFields.length === 0) return;
   roles.forEach((role) => {
-    fields.forEach((field) => {
+    requiredFields.forEach((field) => {
       it(`Should reject missing required field (${field.name}) (${role.type})`, async () => {
         const body = httpRequestOptions.getBody();
         if (field.name in body) {
           delete body[field.name];
         }
-        httpRequestOptions.getBody = () => body;
+
         const response = await executeHttpRequest(
-          httpRequestOptions,
+          { ...httpRequestOptions, getBody: () => body },
           role.getToken,
         );
         expect(response.status).toBe(400);
@@ -37,9 +37,8 @@ export function shouldRejectMissingRequiredFields(
 ) {
   roles.forEach((role) => {
     it(`Should reject missing required fields (${role.type})`, async () => {
-      httpRequestOptions.getBody = () => ({});
       const response = await executeHttpRequest(
-        httpRequestOptions,
+        { ...httpRequestOptions, getBody: () => ({}) },
         role.getToken,
       );
       expect(response.status).toBe(400);
@@ -64,9 +63,8 @@ export function shouldRejectInvalidType(
           const body = httpRequestOptions.getBody();
           body[field.name] = value;
 
-          httpRequestOptions.getBody = () => body;
           const response = await executeHttpRequest(
-            httpRequestOptions,
+            { ...httpRequestOptions, getBody: () => body },
             role.getToken,
           );
           expect(response.status).toBe(400);
@@ -80,16 +78,18 @@ export function shouldRejectNullAndUndefined(
   roles: RoleType[],
   fields: requiredFieldType[],
 ) {
+  const requiredFields = fields.filter((field) => field.required);
+  if (requiredFields.length === 0) return;
   roles.forEach((role) => {
-    fields.forEach((field) => {
+    requiredFields.forEach((field) => {
       const invalidValues = [null, undefined];
       invalidValues.forEach((value) => {
         it(`Should reject ${value === null ? 'null' : 'undefined'} field:(${field.name}) value:(${value}) (${role.type})`, async () => {
           const body = httpRequestOptions.getBody();
           body[field.name] = value;
-          httpRequestOptions.getBody = () => body;
+
           const response = await executeHttpRequest(
-            httpRequestOptions,
+            { ...httpRequestOptions, getBody: () => body },
             role.getToken,
           );
           expect(response.status).toBe(400);
@@ -114,9 +114,8 @@ export function shouldRejectInvalidDomain(
           const body = httpRequestOptions.getBody();
           body[field.name] = value;
 
-          httpRequestOptions.getBody = () => body;
           const response = await executeHttpRequest(
-            httpRequestOptions,
+            { ...httpRequestOptions, getBody: () => body },
             role.getToken,
           );
           expect(response.status).toBe(400);

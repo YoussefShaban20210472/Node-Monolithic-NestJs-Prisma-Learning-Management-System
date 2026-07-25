@@ -1,8 +1,7 @@
-import { UserRole } from '../../../../generated/prisma/enums.js';
 import {
   IsEmail,
-  IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   Length,
@@ -11,47 +10,38 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class UpdateUserDto {
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @Length(3, 20)
   @Matches(/^[a-zA-Z]{3,20}$/, {
     message: 'firstName must contain only letters',
   })
-  firstName!: string;
+  firstName?: string;
 
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @Length(3, 20)
   @Matches(/^[a-zA-Z]{3,20}$/, {
     message: 'lastName must contain only letters',
   })
-  lastName!: string;
+  lastName?: string;
 
+  @IsOptional()
   @IsEmail()
-  email!: string;
+  email?: string;
 
+  @IsOptional()
   @IsPhoneNumber()
-  phoneNumber!: string;
+  phoneNumber?: string;
 
-  @IsString()
-  @Length(8, 100)
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-    {
-      message:
-        'Password must contain at least one uppercase letter, one lowercase letter, one special character, and one number.',
-    },
-  )
-  password!: string;
-
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MinLength(4)
   @MaxLength(1000)
   @Matches(/^\d{1,5}\s\w.\s(\b\w+\b\s){1,2}\w*\.$/)
-  address!: string;
-
-  @IsEnum(UserRole)
-  role!: UserRole;
+  address?: string;
 }

@@ -8,10 +8,17 @@ import { describe } from 'vitest';
 
 export function authorizationSuite(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
+  forbiddenRolesForRole?: RoleType[],
+  forbiddenRolesForAction?: RoleType[],
 ) {
-  describe('Authorization', () => {
-    shouldRejectForbiddenRole(httpRequestOptions, roles);
-    shouldRejectForbiddenAction(httpRequestOptions, roles);
-  });
+  if (forbiddenRolesForAction || forbiddenRolesForRole)
+    describe('Authorization', () => {
+      if (forbiddenRolesForRole)
+        shouldRejectForbiddenRole(httpRequestOptions, forbiddenRolesForRole);
+      if (forbiddenRolesForAction)
+        shouldRejectForbiddenAction(
+          httpRequestOptions,
+          forbiddenRolesForAction,
+        );
+    });
 }
