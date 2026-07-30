@@ -9,7 +9,6 @@ import { notFoundSuite } from './not-found.suite.js';
 
 export function negativeSuite(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
   options: {
     forbiddenRolesForRole?: RoleType[];
     forbiddenRolesForAction?: RoleType[];
@@ -19,10 +18,9 @@ export function negativeSuite(
 ) {
   describe('Negative', () => {
     authenticationSuite(httpRequestOptions);
-    if (options.fields)
-      validationSuite(httpRequestOptions, roles, options.fields);
+    if (options.fields) validationSuite(httpRequestOptions, options.fields);
     if (options.allowNotFound)
-      notFoundSuite(httpRequestOptions, roles, options.fields);
+      notFoundSuite(httpRequestOptions, options.fields);
     authorizationSuite(
       httpRequestOptions,
       options.forbiddenRolesForRole,

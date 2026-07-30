@@ -1,15 +1,13 @@
 import { executeHttpRequest } from '../executors/http.executor.js';
 import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 import { requiredFieldType } from '../types/required-field-type.js';
-import { RoleType } from '../types/role-type.js';
 import { expect, it } from 'vitest';
 
 export function shouldAcceptValidRequest(
   httpRequestOptions: HttpRequestOptionsType[],
-  roles: RoleType[],
 ) {
-  roles.forEach((role) => {
-    httpRequestOptions.forEach((httpRequestOption) => {
+  httpRequestOptions.forEach((httpRequestOption) => {
+    httpRequestOption.roles!.forEach((role) => {
       it(`${httpRequestOption.getDescribeString!(role.type.toLocaleLowerCase())}`, async () => {
         const response = await executeHttpRequest(
           httpRequestOption,
@@ -22,13 +20,13 @@ export function shouldAcceptValidRequest(
 }
 export function shouldAcceptUpdatingOneField(
   httpRequestOptions: HttpRequestOptionsType[],
-  roles: RoleType[],
+
   fields: requiredFieldType[],
 ) {
   const updateFields = fields.filter((field) => !field.required);
   if (updateFields.length === 0) return;
-  roles.forEach((role) => {
-    httpRequestOptions.forEach((httpRequestOption) => {
+  httpRequestOptions.forEach((httpRequestOption) => {
+    httpRequestOption.roles!.forEach((role) => {
       fields.forEach((field) => {
         it(`should ${role.type.toLocaleLowerCase()} updates one field (${field.name})`, async () => {
           const body = httpRequestOption.getBody();

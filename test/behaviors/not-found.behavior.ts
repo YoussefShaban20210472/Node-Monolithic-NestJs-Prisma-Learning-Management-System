@@ -1,15 +1,13 @@
 import { executeHttpRequest } from '../executors/http.executor.js';
 import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 import { requiredFieldType } from '../types/required-field-type.js';
-import { RoleType } from '../types/role-type.js';
 import { expect, it } from 'vitest';
 
 const idRegex = /^[0-9]+$/;
 export function shouldRejectNotFoundIdInUrl(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
 ) {
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     it(`Should reject not found id (${role.type})`, async () => {
       let url = httpRequestOptions.getUrl();
       url = url
@@ -29,12 +27,11 @@ export function shouldRejectNotFoundIdInUrl(
 }
 export function shouldRejectNotFoundIdInBody(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
   fields: requiredFieldType[],
 ) {
   fields = fields.filter((field) => field.domain === 'ID');
   if (fields.length === 0) return;
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     fields.forEach((field) => {
       it(`Should reject not found id (${field.name}) (${role.type})`, async () => {
         const body = httpRequestOptions.getBody();

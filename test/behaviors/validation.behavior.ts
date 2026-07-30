@@ -4,17 +4,16 @@ import { domainInvalidValues } from '../invalid-values/domain/domain-invalid-val
 import { typeInvalidValues } from '../invalid-values/type/type-invalid-values.js';
 import { HttpRequestOptionsType } from '../types/http-request-options-type.js';
 import { requiredFieldType } from '../types/required-field-type.js';
-import { RoleType } from '../types/role-type.js';
 import { expect, it } from 'vitest';
 
 export function shouldRejectMissingRequiredField(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
+
   fields: requiredFieldType[],
 ) {
   const requiredFields = fields.filter((field) => field.required);
   if (requiredFields.length === 0) return;
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     requiredFields.forEach((field) => {
       it(`Should reject missing required field (${field.name}) (${role.type})`, async () => {
         const body = httpRequestOptions.getBody();
@@ -33,9 +32,8 @@ export function shouldRejectMissingRequiredField(
 }
 export function shouldRejectMissingRequiredFields(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
 ) {
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     it(`Should reject missing required fields (${role.type})`, async () => {
       const response = await executeHttpRequest(
         { ...httpRequestOptions, getBody: () => ({}) },
@@ -48,10 +46,10 @@ export function shouldRejectMissingRequiredFields(
 
 export function shouldRejectInvalidType(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
+
   fields: requiredFieldType[],
 ) {
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     fields.forEach((field) => {
       let invalidTypeValues: any[];
       if (field.type && field.type in typeInvalidValues)
@@ -75,12 +73,12 @@ export function shouldRejectInvalidType(
 }
 export function shouldRejectNullAndUndefined(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
+
   fields: requiredFieldType[],
 ) {
   const requiredFields = fields.filter((field) => field.required);
   if (requiredFields.length === 0) return;
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     requiredFields.forEach((field) => {
       const invalidValues = [null, undefined];
       invalidValues.forEach((value) => {
@@ -101,10 +99,10 @@ export function shouldRejectNullAndUndefined(
 
 export function shouldRejectInvalidDomain(
   httpRequestOptions: HttpRequestOptionsType,
-  roles: RoleType[],
+
   fields: requiredFieldType[],
 ) {
-  roles.forEach((role) => {
+  httpRequestOptions.roles!.forEach((role) => {
     fields.forEach((field) => {
       let invalidDomainValues: any[] = [];
       if (field.domain in domainInvalidValues)

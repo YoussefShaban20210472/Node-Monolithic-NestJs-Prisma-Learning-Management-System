@@ -43,11 +43,13 @@ const forbiddenRoles = [
 await describe('Testing create user', () => {
   const method = 'POST';
   const getUrl = () => '/users';
+
   const httpRequestOptions: HttpRequestOptionsType[] = [
     {
       method,
       getUrl,
       getBody: () => createRandomUser('ADMIN'),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} creates an admin user`,
     },
@@ -55,6 +57,7 @@ await describe('Testing create user', () => {
       method,
       getUrl,
       getBody: () => createRandomUser('INSTRUCTOR'),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} creates an instructor user`,
     },
@@ -62,12 +65,13 @@ await describe('Testing create user', () => {
       method,
       getUrl,
       getBody: () => createRandomUser('STUDENT'),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} creates a student user`,
     },
   ];
-  successSuite(httpRequestOptions, roles);
-  negativeSuite(httpRequestOptions[0], roles, {
+  successSuite(httpRequestOptions);
+  negativeSuite(httpRequestOptions[0], {
     forbiddenRolesForRole: forbiddenRoles,
     fields: requiredUserFields,
   });
@@ -80,12 +84,14 @@ await describe('Testing get user by id', () => {
       method,
       getUrl: () => `/users/${adminId}`,
       getBody: () => ({}),
+      roles,
       getDescribeString: (role: string) => `should ${role} gets an admin user`,
     },
     {
       method,
       getUrl: () => `/users/${instructorId}`,
       getBody: () => ({}),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} gets an instructor user`,
     },
@@ -93,11 +99,12 @@ await describe('Testing get user by id', () => {
       method,
       getUrl: () => `/users/${studentId}`,
       getBody: () => ({}),
+      roles,
       getDescribeString: (role: string) => `should ${role} gets a student user`,
     },
   ];
-  successSuite(httpRequestOptions, roles);
-  negativeSuite(httpRequestOptions[0], roles, {
+  successSuite(httpRequestOptions);
+  negativeSuite(httpRequestOptions[0], {
     forbiddenRolesForRole: forbiddenRoles,
     allowNotFound: true,
   });
@@ -119,6 +126,7 @@ await describe('Testing delete user by id', () => {
       method,
       getUrl: () => `/users/${adminId}`,
       getBody: () => ({}),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} deletes an admin user`,
     },
@@ -126,6 +134,7 @@ await describe('Testing delete user by id', () => {
       method,
       getUrl: () => `/users/${instructorId}`,
       getBody: () => ({}),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} deletes an instructor user`,
     },
@@ -133,12 +142,13 @@ await describe('Testing delete user by id', () => {
       method,
       getUrl: () => `/users/${studentId}`,
       getBody: () => ({}),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} deletes a student user`,
     },
   ];
-  successSuite(httpRequestOptions, roles);
-  negativeSuite(httpRequestOptions[0], roles, {
+  successSuite(httpRequestOptions);
+  negativeSuite(httpRequestOptions[0], {
     forbiddenRolesForRole: forbiddenRoles,
     allowNotFound: true,
   });
@@ -150,30 +160,33 @@ await describe('Testing get all users', () => {
     {
       method,
       getUrl: () => `/users`,
+      roles,
       getBody: () => ({}),
       getDescribeString: (role: string) => `should ${role} gets all users`,
     },
   ];
 
-  successSuite(httpRequestOptions, roles);
-  negativeSuite(httpRequestOptions[0], roles, {
+  successSuite(httpRequestOptions);
+  negativeSuite(httpRequestOptions[0], {
     forbiddenRolesForRole: forbiddenRoles,
   });
 });
 
 await describe('Testing get user by me', () => {
   const method = 'GET';
+  const localRoles = [...roles, ...forbiddenRoles];
   const httpRequestOptions: HttpRequestOptionsType[] = [
     {
       method,
       getUrl: () => `/users/me`,
       getBody: () => ({}),
+      roles: localRoles,
       getDescribeString: (role: string) => `should ${role} gets his profile`,
     },
   ];
-  const localRoles = [...roles, ...forbiddenRoles];
-  successSuite(httpRequestOptions, localRoles);
-  negativeSuite(httpRequestOptions[0], localRoles);
+
+  successSuite(httpRequestOptions);
+  negativeSuite(httpRequestOptions[0]);
 });
 
 await describe('Testing update user by id', () => {
@@ -202,6 +215,7 @@ await describe('Testing update user by id', () => {
       method,
       getUrl: () => `/users/${adminId}`,
       getBody: () => getBody(),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} updates an admin user`,
     },
@@ -209,6 +223,7 @@ await describe('Testing update user by id', () => {
       method,
       getUrl: () => `/users/${instructorId}`,
       getBody: () => getBody(),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} updates an instructor user`,
     },
@@ -216,12 +231,13 @@ await describe('Testing update user by id', () => {
       method,
       getUrl: () => `/users/${studentId}`,
       getBody: () => getBody(),
+      roles,
       getDescribeString: (role: string) =>
         `should ${role} updates a student user`,
     },
   ];
-  successSuite(httpRequestOptions, roles, updateUserFields);
-  negativeSuite(httpRequestOptions[0], roles, {
+  successSuite(httpRequestOptions, updateUserFields);
+  negativeSuite(httpRequestOptions[0], {
     forbiddenRolesForRole: forbiddenRoles,
     fields: updateUserFields,
     allowNotFound: true,
@@ -268,11 +284,12 @@ await describe('Testing update user by me', () => {
       method,
       getUrl: () => `/users/me`,
       getBody: () => getBody(),
+      roles,
       getDescribeString: (role: string) => `should ${role} updates his profile`,
     },
   ];
-  successSuite(httpRequestOptions, roles, updateUserFields);
-  negativeSuite(httpRequestOptions[0], roles, {
+  successSuite(httpRequestOptions, updateUserFields);
+  negativeSuite(httpRequestOptions[0], {
     fields: updateUserFields,
   });
 });
