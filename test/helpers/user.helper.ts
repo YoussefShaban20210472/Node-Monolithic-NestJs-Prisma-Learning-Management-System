@@ -32,7 +32,7 @@ export async function createUserAndGetId(user: object, adminToken: string) {
   return String(response.body.id);
 }
 export async function createRandomUserAndGetId(
-  role: string,
+  role: 'ADMIN' | 'INSTRUCTOR' | 'STUDENT',
   adminToken: string,
 ) {
   const user = createRandomUser(role);
@@ -47,7 +47,7 @@ export async function createUserAndLoginAndGetToken(
   return await loginAndGetToken(user);
 }
 export async function createRandomUserAndLoginAndGetToken(
-  role: string,
+  role: 'ADMIN' | 'INSTRUCTOR' | 'STUDENT',
   adminToken: string,
 ) {
   const user = createRandomUser(role);

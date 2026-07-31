@@ -14,10 +14,12 @@ export function negativeSuite(
     forbiddenRolesForAction?: RoleType[];
     fields?: requiredFieldType[];
     allowNotFound?: boolean;
+    allowAuthenication?: boolean;
   } = {},
 ) {
   describe('Negative', () => {
-    authenticationSuite(httpRequestOptions);
+    if (options.allowAuthenication !== false)
+      authenticationSuite(httpRequestOptions);
     if (options.fields) validationSuite(httpRequestOptions, options.fields);
     if (options.allowNotFound)
       notFoundSuite(httpRequestOptions, options.fields);

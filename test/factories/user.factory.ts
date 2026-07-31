@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { faker } from '@faker-js/faker';
 
-export function createRandomUser(role: string = 'admin') {
+export function createRandomUser(role: 'ADMIN' | 'INSTRUCTOR' | 'STUDENT') {
   return {
     firstName: faker.string
       .alpha({ length: { min: 10, max: 15 } })
