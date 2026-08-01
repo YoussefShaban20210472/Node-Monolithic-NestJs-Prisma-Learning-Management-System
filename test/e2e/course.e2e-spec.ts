@@ -39,8 +39,10 @@ beforeAll(async () => {
   );
 });
 
-const forbiddenRoles = [
+const forbiddenRolesForRole = [
   { type: 'STUDENT', getToken: () => `Bearer ${studentToken}` },
+];
+const forbiddenRolesForAction = [
   {
     type: 'Forbidden Instructor',
     getToken: () => `Bearer ${forbiddenInstructorToken}`,
@@ -51,7 +53,7 @@ await describe('Testing create course by admin', () => {
   const method = 'POST';
   const getUrl = () => '/admin/courses';
   const roles = [{ type: 'ADMIN', getToken: () => `Bearer ${adminToken}` }];
-  const forbiddenRoles = [
+  const forbiddenRolesForRole = [
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
     { type: 'STUDENT', getToken: () => `Bearer ${studentToken}` },
   ];
@@ -70,7 +72,7 @@ await describe('Testing create course by admin', () => {
   ];
   successSuite(httpRequestOptions);
   negativeSuite(httpRequestOptions[0], {
-    forbiddenRolesForRole: forbiddenRoles,
+    forbiddenRolesForRole,
     fields: [
       ...requiredCourseFields,
       { name: 'instructorId', type: 'Number', domain: 'ID', required: true },
@@ -83,7 +85,7 @@ await describe('Testing create course by instructor', () => {
   const roles = [
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
   ];
-  const forbiddenRoles = [
+  const forbiddenRolesForRole = [
     { type: 'ADMIN', getToken: () => `Bearer ${adminToken}` },
     { type: 'STUDENT', getToken: () => `Bearer ${studentToken}` },
   ];
@@ -99,7 +101,7 @@ await describe('Testing create course by instructor', () => {
   ];
   successSuite(httpRequestOptions);
   negativeSuite(httpRequestOptions[0], {
-    forbiddenRolesForRole: forbiddenRoles,
+    forbiddenRolesForRole,
     fields: requiredCourseFields,
   });
 });
@@ -143,7 +145,8 @@ await describe('Testing delete course', () => {
   ];
   successSuite(httpRequestOptions.slice(0, 2));
   negativeSuite(httpRequestOptions[2], {
-    forbiddenRolesForRole: forbiddenRoles,
+    forbiddenRolesForRole,
+    forbiddenRolesForAction,
     allowNotFound: true,
   });
 });
@@ -160,12 +163,6 @@ await describe('Testing get course', () => {
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
     { type: 'STUDENT', getToken: () => `Bearer ${studentToken}` },
   ];
-  const forbiddenRoles = [
-    {
-      type: 'Forbidden Instructor',
-      getToken: () => `Bearer ${forbiddenInstructorToken}`,
-    },
-  ];
   const httpRequestOptions: HttpRequestOptionsType[] = [
     {
       method,
@@ -178,7 +175,7 @@ await describe('Testing get course', () => {
   successSuite(httpRequestOptions);
   negativeSuite(httpRequestOptions[0], {
     allowNotFound: true,
-    forbiddenRolesForAction: forbiddenRoles,
+    forbiddenRolesForAction,
   });
 });
 await describe('Testing get all courses', () => {
@@ -215,9 +212,6 @@ await describe('Testing update course', () => {
     { type: 'ADMIN', getToken: () => `Bearer ${adminToken}` },
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
   ];
-  const forbiddenRoles = [
-    { type: 'STUDENT', getToken: () => `Bearer ${studentToken}` },
-  ];
   const httpRequestOptions: HttpRequestOptionsType[] = [
     {
       method,
@@ -243,7 +237,8 @@ await describe('Testing update course', () => {
   ];
   successSuite(httpRequestOptions.slice(0, 2));
   negativeSuite(httpRequestOptions[2], {
-    forbiddenRolesForRole: forbiddenRoles,
+    forbiddenRolesForRole,
+    forbiddenRolesForAction,
     allowNotFound: true,
     fields: updateCourseFields,
   });

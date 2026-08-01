@@ -1,4 +1,7 @@
 export const requiredEnrollmentFields = [
-  { name: 'studentId' },
-  { name: 'courseId' },
-] as const;
+  { name: 'studentId', type: 'Number', domain: 'ID', required: true },
+];
+export const updateEnrollmentFields = [
+  { name: 'studentId', type: 'Number', domain: 'ID', required: true },
+  { name: 'status', domain: 'EnrollmentStatus', required: true },
+];

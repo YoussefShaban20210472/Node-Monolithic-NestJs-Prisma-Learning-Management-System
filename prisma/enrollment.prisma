@@ -1,0 +1,16 @@
+enum EnrollmentStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Enrollment {
+  courseId  Int
+  studentId Int
+  status    EnrollmentStatus @default(PENDING)
+
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, studentId])
+}

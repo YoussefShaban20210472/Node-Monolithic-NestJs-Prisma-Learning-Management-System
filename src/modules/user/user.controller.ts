@@ -12,11 +12,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
-import { UserQueryDto } from './dto/user-query.dto.js';
 import { Role } from '../../common/enum/role.enum.js';
 import { Roles } from '../../common/decorator/roles.decorator.js';
 import type { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
+import { PaginationDto } from '../../common/dto/pagination.dto.js';
 
 @Controller('users')
 export class UserController {
@@ -28,7 +28,7 @@ export class UserController {
   }
   @Roles(Role.ADMIN)
   @Get()
-  findAll(@Query() query: UserQueryDto) {
+  findAll(@Query() query: PaginationDto) {
     return this.userService.findAll(query.page, query.limit);
   }
   @Get('me')

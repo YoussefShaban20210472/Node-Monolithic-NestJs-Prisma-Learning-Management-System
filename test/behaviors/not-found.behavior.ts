@@ -35,7 +35,7 @@ export function shouldRejectNotFoundIdInBody(
     fields.forEach((field) => {
       it(`Should reject not found id (${field.name}) (${role.type})`, async () => {
         const body = httpRequestOptions.getBody();
-        body[field.name] = '999999999';
+        body[field.name] = 999999999;
         const response = await executeHttpRequest(
           { ...httpRequestOptions, getBody: () => body },
           role.getToken,
