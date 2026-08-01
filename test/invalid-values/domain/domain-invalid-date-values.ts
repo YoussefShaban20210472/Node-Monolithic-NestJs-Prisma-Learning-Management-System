@@ -6,7 +6,7 @@ import {
   setMinute,
   setMonth,
   setYear,
-} from 'test/generators/date.generator.js';
+} from '../../generators/date.generator.js';
 
 // '2027-06-18T14:17:01.909Z'
 export const courseStartDate = setDate(new Date(), 1).toISOString();

@@ -9,6 +9,9 @@ import { UserModule } from '../user/user.module.js';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../../common/guard/jwt-auth.guard.js';
 import { RolesGuard } from '../../common/guard/roles.guard.js';
+import { OwnershipGuard } from '../../common/guard/ownership.guard.js';
+import { PrismaModule } from '../../infrastructure/prisma/prisma.module.js';
+import { PermissionModule } from '../../common/permission/permission.module.js';
 
 const JWTModule = JwtModule.register({
   secret: config.jwtSecret,
@@ -17,7 +20,14 @@ const JWTModule = JwtModule.register({
   },
 });
 @Module({
-  imports: [RedisModule, UserModule, HashModule, JWTModule],
+  imports: [
+    RedisModule,
+    UserModule,
+    HashModule,
+    JWTModule,
+    PrismaModule,
+    PermissionModule,
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,
@@ -30,6 +40,10 @@ const JWTModule = JwtModule.register({
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: OwnershipGuard,
     },
   ],
   exports: [AuthService],

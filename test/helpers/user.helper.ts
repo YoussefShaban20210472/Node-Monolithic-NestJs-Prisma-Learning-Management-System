@@ -54,4 +54,16 @@ export async function createRandomUserAndLoginAndGetToken(
   return await createUserAndLoginAndGetToken(user, adminToken);
 }
 
-export async function getUserId(userToken: string) {}
+export async function getUserId(userToken: string) {
+  const httpRequestOptions: HttpRequestOptionsType = {
+    method: 'GET',
+    getBody: () => ({}),
+    getUrl: () => '/users/me',
+  };
+  const response = await executeHttpRequest(
+    httpRequestOptions,
+    () => `Bearer ${userToken}`,
+  );
+  expect(response.status).toBe(200);
+  return String(response.body.id);
+}

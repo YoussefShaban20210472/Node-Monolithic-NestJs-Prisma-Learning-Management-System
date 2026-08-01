@@ -1,0 +1,28 @@
+model Course {
+  id               Int        @id @default(autoincrement())
+  title            String     @map("title")
+  description      String     @map("description")
+  shortDescription String     @map("short_description")
+  instructorId     Int        @map("instructor_id")
+  instructor       User       @relation(fields: [instructorId], references: [id])
+  startDate        DateTime   @map("start_date")
+  endDate          DateTime   @map("end_date")
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @default(now()) @map("updated_at")
+  tags             Tag[]
+  categories       Category[]
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  courses Course[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  courses Course[]
+}

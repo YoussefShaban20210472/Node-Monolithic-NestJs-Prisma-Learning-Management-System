@@ -7,8 +7,8 @@ import {
   generateRandomInvalidDateStrings,
   generateRandomInvalidEmailStrings,
   generateRandomInvalidEnumStrings,
-  generateRandomInvalidIDArrayStrings,
-  generateRandomInvalidIDStrings,
+  generateRandomInvalidIDArrayNumbers,
+  generateRandomInvalidIDNumbers,
   generateRandomInvalidPasswordAbove8Strings,
   generateRandomInvalidPasswordUnder8Strings,
   generateRandomInvalidPdfFileStrings,
@@ -77,7 +77,7 @@ export const domainInvalidValues = {
   EnrollmentStatus: [
     ...generateRandomInvalidEnumStrings(['accepted', 'rejected']),
   ],
-  ID: [...generateRandomInvalidIDStrings()],
+  ID: [...generateRandomInvalidIDNumbers()],
   OTP: [
     ...generateRandomNumberStrings(0, 19),
     ...generateRandomNumberStrings(256, 1000),
@@ -119,7 +119,7 @@ export const domainInvalidValues = {
     ...generateRandomInvalidStringArrayStrings(1, 255),
     generateRandomAlphabetStrings(1, 255, 6, 100),
   ],
-  IDArray: [...generateRandomInvalidIDArrayStrings()],
+  IDArray: [...generateRandomInvalidIDArrayNumbers()],
   QuestionAnswerObject: [...generateRandomInvalidQuestionAnswerArray()],
   PdfFile: [...generateRandomInvalidPdfFileStrings()],
   NotificationStatus: [

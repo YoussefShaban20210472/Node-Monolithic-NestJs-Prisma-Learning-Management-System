@@ -438,20 +438,25 @@ export function generateRandomInvalidStringArrayStrings(
   }).flat();
 }
 
-export function generateRandomInvalidIDStrings(
+export function generateRandomInvalidIDNumbers(
   minCount: number = 10,
   maxCount: number = 20,
-): string[] {
-  const array = [
-    ...smallAlphabet.slice(0, 6),
-    ...capitalAlphabet.slice(0, 6),
-    ...numbers,
-  ];
+): number[] {
+  const minlength = 2;
+  const maxlength = 10;
+  const numbers = () =>
+    generateRandomNumberStrings(minlength, maxlength, minCount, maxCount);
+  const negativeNumbers = numbers().map((number) => parseInt(`-${number}`));
+  const floatingPointNumbers = numbers().map((number) =>
+    parseFloat(`${number}.${number.slice(0, 4)}`),
+  );
+  const negativeFloatingPointNumbers = numbers().map((number) =>
+    parseFloat(`-${number}.${number.slice(0, 4)}`),
+  );
   return [
-    ...generateRandomStrings(array, 0, 23, minCount, maxCount),
-    ...generateRandomStrings(array, 25, 100, minCount, maxCount),
-    ...generateRandomAlphanumericStrings(24, 24, minCount, maxCount),
-    ...generateRandomMixStrings(24, 24, minCount, maxCount),
+    ...negativeNumbers,
+    ...floatingPointNumbers,
+    ...negativeFloatingPointNumbers,
   ];
 }
 
@@ -471,14 +476,14 @@ export function generateRandomIntegers(
   });
 }
 
-export function generateRandomInvalidIDArrayStrings(
+export function generateRandomInvalidIDArrayNumbers(
   minCount: number = 20,
   maxCount: number = 40,
-): string[][] {
+): number[][] {
   const count =
     Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
   return Array.from({ length: count }, () => {
-    return generateRandomInvalidIDStrings();
+    return generateRandomInvalidIDNumbers();
   });
 }
 function generateRandomInvalidAnswerStrings(
@@ -499,11 +504,11 @@ function generateRandomInvalidAnswerStrings(
 export function generateRandomInvalidQuestionAnswerArray(
   minCount: number = 20,
   maxCount: number = 40,
-): { questionId: string; answer: string }[] {
-  const invalidIds = generateRandomInvalidIDStrings(minCount, maxCount);
+): { questionId: number; answer: string }[] {
+  const invalidIds = generateRandomInvalidIDNumbers(minCount, maxCount);
   const invalidAnswers = generateRandomInvalidAnswerStrings(minCount, maxCount);
   const count = Math.min(invalidAnswers.length, invalidIds.length);
-  const answers: { questionId: string; answer: string }[] = [];
+  const answers: { questionId: number; answer: string }[] = [];
   for (let i = 0; i < count; i++) {
     answers.push({ answer: invalidAnswers[i], questionId: invalidIds[i] });
   }
