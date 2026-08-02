@@ -17,4 +17,5 @@ model User {
   updatedAt   DateTime     @default(now()) @map("updated_at")
   courses     Course[]
   enrollments Enrollment[]
+  lessons     Lesson[]
 }

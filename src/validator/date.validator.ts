@@ -6,8 +6,8 @@ export const SEVEN_DAYS = 7 * ONE_DAY;
 export const ONE_YEAR = 365 * ONE_DAY;
 
 export function assertDuration(
-  startDate: string,
-  endDate: string,
+  startDate: string | Date,
+  endDate: string | Date,
   type: 'minutes' | 'days',
 ) {
   const start = new Date(startDate).getTime();
@@ -34,7 +34,7 @@ export function assertDuration(
   }
 }
 
-export function checkTimeBetweenTodayAndYear(time: string) {
+export function checkTimeBetweenTodayAndYear(time: string | Date) {
   const date = new Date(time);
   const today = new Date();
   const oneYearFromNow = new Date(today.getTime() + ONE_YEAR);
@@ -51,6 +51,9 @@ export function assertValidTimeAndDuration(
   const courseEndDate = new Date(course.endDate);
   const startDate = new Date(object.startDate);
   const endDate = new Date(object.endDate);
+
+  assertDuration(object.startDate, object.endDate, 'minutes');
+
   let message: string = '';
   if (startDate < courseStartDate) {
     message = `${objectName} start date must start after course start date`;

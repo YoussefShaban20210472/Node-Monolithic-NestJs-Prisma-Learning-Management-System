@@ -12,6 +12,7 @@ import { RolesGuard } from '../../common/guard/roles.guard.js';
 import { OwnershipGuard } from '../../common/guard/ownership.guard.js';
 import { PrismaModule } from '../../infrastructure/prisma/prisma.module.js';
 import { PermissionModule } from '../../common/permission/permission.module.js';
+import { StudentEnrolledGuard } from '../../common/guard/studentEnrolled.guard.js';
 
 const JWTModule = JwtModule.register({
   secret: config.jwtSecret,
@@ -44,6 +45,10 @@ const JWTModule = JwtModule.register({
     {
       provide: APP_GUARD,
       useClass: OwnershipGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: StudentEnrolledGuard,
     },
   ],
   exports: [AuthService],

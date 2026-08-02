@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PermissionService } from './permission.service.js';
-import { OwnershipCheckerModule } from '../../checker/ownership.checker.module.js';
+import { AuthorizationCheckerModule } from '../checker/authorization.checker.module.js';
 
 @Module({
-  imports: [OwnershipCheckerModule],
+  imports: [AuthorizationCheckerModule],
   providers: [PermissionService],
   exports: [PermissionService],
 })

@@ -7,9 +7,16 @@ import { PrismaExceptionFilter } from './common/filter/prisma-exception.filter.j
 import { AuthModule } from './modules/auth/auth.module.js';
 import { CourseModule } from './modules/course/course.module.js';
 import { EnrollmentModule } from './modules/enrollment/enrollment.module.js';
+import { LessonModule } from './modules/lesson/lesson.module.js';
 
 @Module({
-  imports: [UserModule, AuthModule, CourseModule, EnrollmentModule],
+  imports: [
+    UserModule,
+    AuthModule,
+    CourseModule,
+    EnrollmentModule,
+    LessonModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
