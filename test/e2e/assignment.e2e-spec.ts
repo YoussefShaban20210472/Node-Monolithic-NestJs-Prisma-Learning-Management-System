@@ -16,12 +16,12 @@ import { negativeSuite } from '../suites/negative.suite.js';
 
 import { createRandomCourseAndGetId } from '../helpers/course.helper.js';
 
-import { createRandomLesson } from '../factories/lesson.factory.js';
+import { createRandomAssignment } from '../factories/assignment.factory.js';
 import {
-  requiredLessonFields,
-  updateLessonFields,
-} from '../schemas/lesson.schema.js';
-import { createRandomLessonAndGetId } from '../helpers/lesson.helper.js';
+  requiredAssignmentFields,
+  updateAssignmentFields,
+} from '../schemas/assignment.schema.js';
+import { createRandomAssignmentAndGetId } from '../helpers/assignment.helper.js';
 import {
   enrollStudent,
   enrollStudentAndAccept,
@@ -62,9 +62,9 @@ const forbiddenRolesForAction = [
 const forbiddenRolesForRole = [
   { type: 'STUDENT', getToken: () => `Bearer ${studentToken}` },
 ];
-await describe('Testing create lesson', () => {
+await describe('Testing create assignment', () => {
   const method = 'POST';
-  const getUrl = () => `/courses/${courseId}/lessons`;
+  const getUrl = () => `/courses/${courseId}/assignments`;
   const roles = [
     { type: 'ADMIN', getToken: () => `Bearer ${adminToken}` },
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
@@ -73,28 +73,28 @@ await describe('Testing create lesson', () => {
     {
       method,
       getUrl,
-      getBody: () => createRandomLesson(),
+      getBody: () => createRandomAssignment(),
       roles,
       getDescribeString: (role: string) =>
-        `should ${role} creates a new lesson to a course`,
+        `should ${role} creates a new assignment to a course`,
     },
   ];
   successSuite(httpRequestOptions);
   negativeSuite(httpRequestOptions[0], {
     forbiddenRolesForRole,
     forbiddenRolesForAction,
-    fields: requiredLessonFields,
+    fields: requiredAssignmentFields,
     allowNotFound: true,
   });
 });
 
-await describe('Testing get lesson', () => {
-  let lessonId: string;
+await describe('Testing get assignment', () => {
+  let assignmentId: string;
   beforeAll(async () => {
-    lessonId = await createRandomLessonAndGetId(courseId, adminToken);
+    assignmentId = await createRandomAssignmentAndGetId(courseId, adminToken);
   });
   const method = 'GET';
-  const getUrl = () => `/lessons/${lessonId}`;
+  const getUrl = () => `/assignments/${assignmentId}`;
   const roles = [
     { type: 'ADMIN', getToken: () => `Bearer ${adminToken}` },
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
@@ -116,7 +116,7 @@ await describe('Testing get lesson', () => {
       getUrl,
       getBody: () => ({}),
       roles,
-      getDescribeString: (role: string) => `should ${role} gets a lesson`,
+      getDescribeString: (role: string) => `should ${role} gets a assignment`,
     },
   ];
   successSuite(httpRequestOptions);
@@ -126,12 +126,12 @@ await describe('Testing get lesson', () => {
   });
 });
 
-await describe('Testing get all lessons', () => {
+await describe('Testing get all assignments', () => {
   beforeAll(async () => {
-    await createRandomLessonAndGetId(courseId, adminToken);
+    await createRandomAssignmentAndGetId(courseId, adminToken);
   });
   const method = 'GET';
-  const getUrl = () => `/courses/${courseId}/lessons`;
+  const getUrl = () => `/courses/${courseId}/assignments`;
   const roles = [
     { type: 'ADMIN', getToken: () => `Bearer ${adminToken}` },
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
@@ -153,7 +153,8 @@ await describe('Testing get all lessons', () => {
       getUrl,
       getBody: () => ({}),
       roles,
-      getDescribeString: (role: string) => `should ${role} gets all lessons`,
+      getDescribeString: (role: string) =>
+        `should ${role} gets all assignments`,
     },
   ];
   successSuite(httpRequestOptions);
@@ -163,12 +164,12 @@ await describe('Testing get all lessons', () => {
   });
 });
 
-await describe('Testing delete lesson', () => {
-  let lessonId1: string, lessonId2: string, lessonId3: string;
+await describe('Testing delete assignment', () => {
+  let assignmentId1: string, assignmentId2: string, assignmentId3: string;
   beforeAll(async () => {
-    lessonId1 = await createRandomLessonAndGetId(courseId, adminToken);
-    lessonId2 = await createRandomLessonAndGetId(courseId, adminToken);
-    lessonId3 = await createRandomLessonAndGetId(courseId, adminToken);
+    assignmentId1 = await createRandomAssignmentAndGetId(courseId, adminToken);
+    assignmentId2 = await createRandomAssignmentAndGetId(courseId, adminToken);
+    assignmentId3 = await createRandomAssignmentAndGetId(courseId, adminToken);
   });
   const method = 'DELETE';
   const getBody = () => ({});
@@ -180,24 +181,27 @@ await describe('Testing delete lesson', () => {
   const httpRequestOptions: HttpRequestOptionsType[] = [
     {
       method,
-      getUrl: () => `/lessons/${lessonId1}`,
+      getUrl: () => `/assignments/${assignmentId1}`,
       getBody,
       roles: [roles[0]],
-      getDescribeString: (role: string) => `should ${role} deletes a lesson`,
+      getDescribeString: (role: string) =>
+        `should ${role} deletes a assignment`,
     },
     {
       method,
-      getUrl: () => `/lessons/${lessonId2}`,
+      getUrl: () => `/assignments/${assignmentId2}`,
       getBody,
       roles: [roles[1]],
-      getDescribeString: (role: string) => `should ${role} deletes a lesson`,
+      getDescribeString: (role: string) =>
+        `should ${role} deletes a assignment`,
     },
     {
       method,
-      getUrl: () => `/lessons/${lessonId3}`,
+      getUrl: () => `/assignments/${assignmentId3}`,
       getBody,
       roles,
-      getDescribeString: (role: string) => `should ${role} deletes a lesson`,
+      getDescribeString: (role: string) =>
+        `should ${role} deletes a assignment`,
     },
   ];
   successSuite(httpRequestOptions.slice(0, 2));
@@ -208,15 +212,15 @@ await describe('Testing delete lesson', () => {
   });
 });
 
-await describe('Testing update lesson', () => {
-  let lessonId1: string, lessonId2: string, lessonId3: string;
+await describe('Testing update assignment', () => {
+  let assignmentId1: string, assignmentId2: string, assignmentId3: string;
   beforeAll(async () => {
-    lessonId1 = await createRandomLessonAndGetId(courseId, adminToken);
-    lessonId2 = await createRandomLessonAndGetId(courseId, adminToken);
-    lessonId3 = await createRandomLessonAndGetId(courseId, adminToken);
+    assignmentId1 = await createRandomAssignmentAndGetId(courseId, adminToken);
+    assignmentId2 = await createRandomAssignmentAndGetId(courseId, adminToken);
+    assignmentId3 = await createRandomAssignmentAndGetId(courseId, adminToken);
   });
   const method = 'PATCH';
-  const getBody = () => createRandomLesson();
+  const getBody = () => createRandomAssignment();
   const roles = [
     { type: 'ADMIN', getToken: () => `Bearer ${adminToken}` },
     { type: 'INSTRUCTOR', getToken: () => `Bearer ${instructorToken}` },
@@ -225,24 +229,27 @@ await describe('Testing update lesson', () => {
   const httpRequestOptions: HttpRequestOptionsType[] = [
     {
       method,
-      getUrl: () => `/lessons/${lessonId1}`,
+      getUrl: () => `/assignments/${assignmentId1}`,
       getBody,
       roles: [roles[0]],
-      getDescribeString: (role: string) => `should ${role} updates a lesson`,
+      getDescribeString: (role: string) =>
+        `should ${role} updates a assignment`,
     },
     {
       method,
-      getUrl: () => `/lessons/${lessonId2}`,
+      getUrl: () => `/assignments/${assignmentId2}`,
       getBody,
       roles: [roles[1]],
-      getDescribeString: (role: string) => `should ${role} updates a lesson`,
+      getDescribeString: (role: string) =>
+        `should ${role} updates a assignment`,
     },
     {
       method,
-      getUrl: () => `/lessons/${lessonId3}`,
+      getUrl: () => `/assignments/${assignmentId3}`,
       getBody,
       roles,
-      getDescribeString: (role: string) => `should ${role} updates a lesson`,
+      getDescribeString: (role: string) =>
+        `should ${role} updates a assignment`,
     },
   ];
   successSuite(httpRequestOptions.slice(0, 2));
@@ -250,6 +257,6 @@ await describe('Testing update lesson', () => {
     forbiddenRolesForRole,
     forbiddenRolesForAction,
     allowNotFound: true,
-    fields: updateLessonFields,
+    fields: updateAssignmentFields,
   });
 });

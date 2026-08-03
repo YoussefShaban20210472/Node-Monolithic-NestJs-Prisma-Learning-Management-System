@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AuthorizationChecker } from '../interface/authorization-checker.interface.js';
 import { Resource } from '../../common/enum/resource.enum.js';
 import { PrismaService } from '../../infrastructure/prisma/prisma.service.js';
+import { EnrollmentStatus } from '../../../generated/prisma/enums.js';
 
 @Injectable()
 export class CourseChecker implements AuthorizationChecker {
@@ -32,7 +33,7 @@ export class CourseChecker implements AuthorizationChecker {
     }
 
     const enrollment = await this.prisma.enrollment.findFirst({
-      where: { courseId, studentId },
+      where: { courseId, studentId, status: EnrollmentStatus.ACCEPTED },
     });
     return !!enrollment;
   }

@@ -18,4 +18,5 @@ model User {
   courses     Course[]
   enrollments Enrollment[]
   lessons     Lesson[]
+  assignments Assignment[]
 }

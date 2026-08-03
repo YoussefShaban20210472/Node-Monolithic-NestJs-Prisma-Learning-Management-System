@@ -13,6 +13,7 @@ model Course {
   categories       Category[]
   enrollments      Enrollment[]
   lessons          Lesson[]
+  assignments      Assignment[]
 }
 
 model Tag {

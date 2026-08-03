@@ -8,32 +8,32 @@ import { PrismaService } from '../../infrastructure/prisma/prisma.service.js';
 import { EnrollmentStatus } from '../../../generated/prisma/enums.js';
 
 @Injectable()
-export class LessonChecker implements AuthorizationChecker {
-  readonly resource = Resource.LESSON;
+export class AssignmentChecker implements AuthorizationChecker {
+  readonly resource = Resource.ASSIGNMENT;
 
   constructor(private readonly prisma: PrismaService) {}
-  async owns(lessonId: number, instructorId: number): Promise<boolean> {
-    const lesson = await this.prisma.lesson.findFirst({
+  async owns(assignmentId: number, instructorId: number): Promise<boolean> {
+    const assignment = await this.prisma.assignment.findFirst({
       where: {
-        id: lessonId,
+        id: assignmentId,
       },
     });
-    if (!lesson) {
-      throw new NotFoundException('Lesson not found');
+    if (!assignment) {
+      throw new NotFoundException('Assignment not found');
     }
 
-    return lesson.instructorId === instructorId;
+    return assignment.instructorId === instructorId;
   }
-  async enrolls(lessonId: number, studentId: number): Promise<boolean> {
-    const lesson = await this.prisma.lesson.findFirst({
+  async enrolls(assignmentId: number, studentId: number): Promise<boolean> {
+    const assignment = await this.prisma.assignment.findFirst({
       where: {
-        id: lessonId,
+        id: assignmentId,
       },
     });
-    if (!lesson) {
-      throw new NotFoundException('Lesson not found');
+    if (!assignment) {
+      throw new NotFoundException('Assignment not found');
     }
-    const courseId = lesson.courseId;
+    const courseId = assignment.courseId;
     const enrollment = await this.prisma.enrollment.findFirst({
       where: { courseId, studentId, status: EnrollmentStatus.ACCEPTED },
     });

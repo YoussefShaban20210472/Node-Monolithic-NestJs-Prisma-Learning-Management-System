@@ -7,13 +7,12 @@ import {
   startDate,
 } from '../invalid-values/domain/domain-invalid-date-values.js';
 
-export function createRandomAssignment(courseId: string = ''): {
+export function createRandomAssignment(): {
   title: string;
   description: string;
   score: number;
   startDate: string;
   endDate: string;
-  courseId?: string;
 } {
   return {
     title: faker.string.alpha({ length: { min: 5, max: 255 } }),
@@ -21,6 +20,5 @@ export function createRandomAssignment(courseId: string = ''): {
     score: faker.number.int({ min: 0, max: 100 }),
     startDate: startDate,
     endDate: endDate,
-    courseId: courseId,
   };
 }

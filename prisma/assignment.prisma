@@ -1,0 +1,14 @@
+model Assignment {
+  id           Int      @id @default(autoincrement())
+  title        String   @map("title")
+  description  String   @map("description")
+  score        Int
+  startDate    DateTime @map("start_date")
+  endDate      DateTime @map("end_date")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @map("updated_at")
+  instructorId Int      @map("instructor_id")
+  instructor   User     @relation(fields: [instructorId], references: [id])
+  courseId     Int      @map("course_id")
+  course       Course   @relation(fields: [courseId], references: [id])
+}

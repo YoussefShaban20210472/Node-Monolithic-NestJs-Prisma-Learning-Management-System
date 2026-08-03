@@ -13,10 +13,7 @@ import {
   CreateLessonDto,
   CreateLessonInputDto,
 } from './dto/create-lesson.dto.js';
-import {
-  assertDuration,
-  assertValidTimeAndDuration,
-} from '../../validator/date.validator.js';
+import { assertValidTimeAndDuration } from '../../validator/date.validator.js';
 import { UpdateLessonDto } from './dto/update-lesson.dto.js';
 import { generateOTP } from '../../common/utils/otp.js';
 import { CourseService } from '../course/course.service.js';
@@ -28,7 +25,6 @@ export class LessonService {
   ) {}
 
   async create(courseId: number, dto: CreateLessonInputDto) {
-    assertDuration(dto.startDate, dto.endDate, 'minutes');
     const otp = generateOTP();
     const course = await this.courseService.findById(courseId);
 
@@ -39,6 +35,11 @@ export class LessonService {
       instructorId: course.instructorId,
     };
 
+    assertValidTimeAndDuration(
+      course,
+      { startDate: dto.startDate, endDate: dto.endDate },
+      'Lesson',
+    );
     return this.lessonRepository.create(data);
   }
   async deleteById(id: number) {
