@@ -9,6 +9,7 @@ import { CourseModule } from './modules/course/course.module.js';
 import { EnrollmentModule } from './modules/enrollment/enrollment.module.js';
 import { LessonModule } from './modules/lesson/lesson.module.js';
 import { AssignmentModule } from './modules/assignment/assignment.module.js';
+import { AttendanceModule } from './modules/attendance/attendance.module.js';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AssignmentModule } from './modules/assignment/assignment.module.js';
     EnrollmentModule,
     LessonModule,
     AssignmentModule,
+    AttendanceModule,
   ],
   controllers: [AppController],
   providers: [

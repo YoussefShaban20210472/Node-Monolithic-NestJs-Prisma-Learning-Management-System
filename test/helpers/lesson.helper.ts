@@ -29,6 +29,18 @@ export async function createRandomLessonAndGetId(
   return await createLessonAndGetId(lesson, courseId, adminToken);
 }
 
-export async function getLessonOTPById(lessonId: string, adminToken: string) {}
+export async function getLessonOTPById(lessonId: string, adminToken: string) {
+  const httpRequestOptions: HttpRequestOptionsType = {
+    method: 'GET',
+    getBody: () => ({}),
+    getUrl: () => `/lessons/${lessonId}/OTP`,
+  };
+  const response = await executeHttpRequest(
+    httpRequestOptions,
+    () => `Bearer ${adminToken}`,
+  );
+  expect(response.status).toBe(200);
+  return String(response.body.otp);
+}
 export async function deleteLessonById(lessonId: string, adminToken: string) {}
 export async function updateLessonById(lessonId: string, adminToken: string) {}

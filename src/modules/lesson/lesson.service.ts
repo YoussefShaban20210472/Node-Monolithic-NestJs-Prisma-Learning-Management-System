@@ -60,6 +60,15 @@ export class LessonService {
 
     return lesson;
   }
+  async findOtpById(id: number) {
+    const lesson = await this.lessonRepository.findOtpById(id);
+
+    if (!lesson) {
+      throw new NotFoundException('Lesson not found');
+    }
+
+    return lesson;
+  }
   async findAll(courseId: number, page = 1, limit = 10) {
     await this.courseService.findById(courseId);
     return this.lessonRepository.findAll((page - 1) * limit, limit);

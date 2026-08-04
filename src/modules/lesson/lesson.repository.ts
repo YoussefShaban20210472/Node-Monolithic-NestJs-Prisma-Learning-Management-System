@@ -7,6 +7,9 @@ import { PrismaService } from '../../infrastructure/prisma/prisma.service.js';
 import { CreateLessonDto } from './dto/create-lesson.dto.js';
 import { UpdateLessonDto } from './dto/update-lesson.dto.js';
 
+const omit = {
+  otp: true,
+};
 @Injectable()
 export class LessonRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -27,17 +30,26 @@ export class LessonRepository {
           connect: { id: data.courseId },
         },
       },
+      omit,
     });
   }
 
   deleteById(id: number) {
     return this.prisma.lesson.delete({
       where: { id },
+      omit,
     });
   }
   findById(id: number) {
     return this.prisma.lesson.findUnique({
       where: { id },
+      omit,
+    });
+  }
+  findOtpById(id: number) {
+    return this.prisma.lesson.findUnique({
+      where: { id },
+      select: { otp: true },
     });
   }
   findAll(skip = 0, take = 10) {
@@ -47,12 +59,14 @@ export class LessonRepository {
       orderBy: {
         createdAt: 'desc',
       },
+      omit,
     });
   }
   updateById(id: number, dto: UpdateLessonDto) {
     return this.prisma.lesson.update({
       where: { id },
       data: dto,
+      omit,
     });
   }
 }

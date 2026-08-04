@@ -1,17 +1,11 @@
 export const requiredAttendanceByStudentFields = [
-  { name: 'lessonId', domain: 'ID' },
-  { name: 'otp', domain: 'OTP' },
-] as const;
+  { name: 'otp', domain: 'OTP', required: true },
+];
 export const requiredAttendanceByAdminFields = [
-  { name: 'lessonId', domain: 'ID' },
-  { name: 'studentId', domain: 'ID' },
-  { name: 'otp', domain: 'OTP' },
-] as const;
+  { name: 'studentId', type: 'Number', domain: 'ID', required: true },
+  { name: 'otp', domain: 'OTP', required: true },
+];
 
-export const requiredGetAttendanceByStudentFields = [
-  { name: 'lessonId', domain: 'ID' },
-] as const;
 export const requiredGetAttendanceFields = [
-  { name: 'lessonId', domain: 'ID' },
-  { name: 'studentId', domain: 'ID' },
-] as const;
+  { name: 'studentId', type: 'Number', domain: 'ID', required: true },
+];

@@ -43,6 +43,12 @@ export class LessonController {
   findById(@Param('id', ParseIntPipe) id: number) {
     return this.lessonService.findById(id);
   }
+  @Roles(Role.ADMIN, Role.INSTRUCTOR)
+  @Owner(Resource.LESSON)
+  @Get('lessons/:id/OTP')
+  findOtpById(@Param('id', ParseIntPipe) id: number) {
+    return this.lessonService.findOtpById(id);
+  }
   @Enrolled(Resource.COURSE)
   @Owner(Resource.COURSE)
   @Get('courses/:id/lessons')

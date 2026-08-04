@@ -13,12 +13,12 @@ import {
 import { EnrollmentService } from './enrollment.service.js';
 import { Role } from '../../common/enum/role.enum.js';
 import { Roles } from '../../common/decorator/roles.decorator.js';
-import type { AuthenticatedRequest } from 'src/common/interface/authenticated-request.interface.js';
+import type { AuthenticatedRequest } from '../../common/interface/authenticated-request.interface.js';
 import { UpdateEnrollmentDto } from './dto/update-enrollment.dto.js';
-import { EnrollmentDto } from './dto/enrollment.dto.js';
 import { PaginationDto } from '../../common/dto/pagination.dto.js';
 import { Resource } from '../../common/enum/resource.enum.js';
 import { Owner } from '../../common/decorator/owner.decorator.js';
+import { StudentIdDto } from '../../common/dto/studentId.js';
 
 @Controller()
 export class EnrollmentController {
@@ -27,7 +27,7 @@ export class EnrollmentController {
   @Post('admin/courses/:id/enrollments')
   createByAdmin(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: EnrollmentDto,
+    @Body() dto: StudentIdDto,
   ) {
     return this.enrollmentService.create(id, dto.studentId);
   }
@@ -51,7 +51,7 @@ export class EnrollmentController {
   @Roles(Role.ADMIN, Role.INSTRUCTOR)
   @Owner(Resource.COURSE)
   @Get('courses/:id/enrollments')
-  findOne(@Param('id', ParseIntPipe) id: number, @Body() dto: EnrollmentDto) {
+  findOne(@Param('id', ParseIntPipe) id: number, @Body() dto: StudentIdDto) {
     return this.enrollmentService.findOne(id, dto.studentId);
   }
 
@@ -68,7 +68,7 @@ export class EnrollmentController {
   @Delete('admin/courses/:id/enrollments')
   deleteByAdmin(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: EnrollmentDto,
+    @Body() dto: StudentIdDto,
   ) {
     return this.enrollmentService.deleteOne(id, dto.studentId);
   }

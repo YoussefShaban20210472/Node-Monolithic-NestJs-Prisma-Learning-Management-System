@@ -1,0 +1,10 @@
+model Attendance {
+  lessonId   Int      @map("lesson_id")
+  studentId  Int      @map("student_id")
+  attendedAt DateTime @default(now()) @map("attended_at")
+
+  lesson  Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  student User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@id([lessonId, studentId])
+}

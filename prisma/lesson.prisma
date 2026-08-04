@@ -11,4 +11,5 @@ model Lesson {
   instructor   User     @relation(fields: [instructorId], references: [id])
   courseId     Int      @map("course_id")
   course       Course   @relation(fields: [courseId], references: [id])
+  attendances Attendance[]
 }
