@@ -3,6 +3,12 @@ export default {
   redisExpiresIn: 15 * 60,
   jwtSecret: process.env.JWT_SECRET!,
   port: Number(process.env.PORT!),
+  storage_server: process.env.STORAGE_SERVER,
+  storage_api_key: process.env.STORAGE_API_KEY,
+  upload_api: `${process.env.STORAGE_SERVER}upload/signedUrl`,
+  download_api: `${process.env.STORAGE_SERVER}download/signedUrl`,
+  delete_api: `${process.env.STORAGE_SERVER}delete/signedUrl`,
+  check_file_exists_api: `${process.env.STORAGE_SERVER}file`,
   admin: {
     firstName: process.env.ADMIN_FIRSTNAME!,
     lastName: process.env.ADMIN_LASTNAME!,

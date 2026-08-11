@@ -1,0 +1,7 @@
+model CourseMediaFile {
+  file       String   @unique
+  path       String   @unique
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  courseId   Int      @map("course_id")
+  course     Course   @relation(fields: [courseId], references: [id])
+}
