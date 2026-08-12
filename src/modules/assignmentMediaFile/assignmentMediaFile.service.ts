@@ -1,27 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CourseMediaFileRepository } from './courseMediaFile.repository.js';
-import { MediaFileDto } from '../../common/dto/mediaFile.dto.js';
+import { AssignmentMediaFileRepository } from './assignmentMediaFile.repository.js';
 import path from 'path';
 import { RequestService } from '../../common/request/request.service.js';
+import { MediaFileDto } from '../../common/dto/mediaFile.dto.js';
 
 @Injectable()
-export class CourseMediaFileService {
+export class AssignmentMediaFileService {
   constructor(
-    private readonly courseRepository: CourseMediaFileRepository,
+    private readonly assignmentMediaFileRepository: AssignmentMediaFileRepository,
     private readonly requestService: RequestService,
   ) {}
 
   async createSignedUrl(
-    courseId: number,
+    assignmentId: number,
     dto: MediaFileDto,
     type: 'upload' | 'download' | 'delete',
   ) {
-    const DIR = path.join(`courses`, String(courseId), 'mediaFiles');
+    const DIR = path.join(`assignments`, String(assignmentId), 'mediaFiles');
     const filePath = path.join(DIR, dto.file);
     if (type !== 'upload') await this.assertMediaFileExists(filePath);
     else await this.assertMediaFileNotExists(filePath);
@@ -34,11 +35,11 @@ export class CourseMediaFileService {
   }
 
   async confirmSignedUrl(
-    courseId: number,
+    assignmentId: number,
     dto: MediaFileDto,
     type: 'upload' | 'delete',
   ) {
-    const DIR = path.join(`courses`, String(courseId), 'mediaFiles');
+    const DIR = path.join(`assignments`, String(assignmentId), 'mediaFiles');
     const filePath = path.join(DIR, dto.file);
     if (type !== 'upload') await this.assertMediaFileExists(filePath);
     else await this.assertMediaFileNotExists(filePath);
@@ -48,34 +49,40 @@ export class CourseMediaFileService {
 
     if (type === 'delete') {
       if (isFileExsitedOnServer) {
-        throw new ConflictException('Course Media File is arleady existed');
+        throw new ConflictException('Assignment Media File is arleady existed');
       }
       return await this.deleteMediaFile(filePath);
     } else {
       if (!isFileExsitedOnServer) {
-        throw new NotFoundException('Course Media File not found');
+        throw new NotFoundException('Assignment Media File not found');
       }
-      return await this.createMediaFile(courseId, dto.file, filePath);
+      return await this.createMediaFile(assignmentId, dto.file, filePath);
     }
   }
-  async createMediaFile(courseId: number, file: string, filePath: string) {
-    return await this.courseRepository.create(courseId, file, filePath);
+  async createMediaFile(assignmentId: number, file: string, filePath: string) {
+    return await this.assignmentMediaFileRepository.create(
+      assignmentId,
+      file,
+      filePath,
+    );
   }
   async deleteMediaFile(filePath: string) {
-    const result = await this.courseRepository.deleteByPath(filePath);
+    const result =
+      await this.assignmentMediaFileRepository.deleteByPath(filePath);
     if (result === null) {
-      throw new NotFoundException('Course Media File not found');
+      throw new NotFoundException('Assignment Media File not found');
     }
     return result;
   }
   async findByPath(path: string) {
-    const courseMediaFile = await this.courseRepository.findByPath(path);
+    const assignmentMediaFile =
+      await this.assignmentMediaFileRepository.findByPath(path);
 
-    if (!courseMediaFile) {
-      throw new NotFoundException('Course Media File not found');
+    if (!assignmentMediaFile) {
+      throw new NotFoundException('Assignment Media File not found');
     }
 
-    return courseMediaFile;
+    return assignmentMediaFile;
   }
   async assertMediaFileExists(path: string) {
     await this.findByPath(path);
@@ -83,12 +90,16 @@ export class CourseMediaFileService {
   async assertMediaFileNotExists(path: string) {
     try {
       await this.findByPath(path);
-      throw new ConflictException('Course Media File is already existed');
+      throw new ConflictException('Assignment Media File is already existed');
     } catch {
       return;
     }
   }
-  findAll(courseId: number, page = 1, limit = 10) {
-    return this.courseRepository.findAll(courseId, (page - 1) * limit, limit);
+  findAll(assignmentId: number, page = 1, limit = 10) {
+    return this.assignmentMediaFileRepository.findAll(
+      assignmentId,
+      (page - 1) * limit,
+      limit,
+    );
   }
 }

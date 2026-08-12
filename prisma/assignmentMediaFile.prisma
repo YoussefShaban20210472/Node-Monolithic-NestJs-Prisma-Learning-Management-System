@@ -1,0 +1,7 @@
+model AssignmentMediaFile {
+  file         String     @unique
+  path         String     @unique
+  uploadedAt   DateTime   @default(now()) @map("uploaded_at")
+  assignmentId Int        @map("assignment_id")
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+}

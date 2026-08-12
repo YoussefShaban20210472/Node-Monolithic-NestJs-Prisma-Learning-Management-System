@@ -1,7 +1,6 @@
-// import { Type } from 'class-transformer';
 import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
 
-export class CourseMediaFileDto {
+export class MediaFileDto {
   @IsString()
   @IsNotEmpty()
   @Length(5, 255)

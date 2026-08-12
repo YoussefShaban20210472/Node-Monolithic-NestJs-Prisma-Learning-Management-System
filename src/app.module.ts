@@ -11,6 +11,7 @@ import { LessonModule } from './modules/lesson/lesson.module.js';
 import { AssignmentModule } from './modules/assignment/assignment.module.js';
 import { AttendanceModule } from './modules/attendance/attendance.module.js';
 import { CourseMediaFileModule } from './modules/courseMediaFile/courseMediaFile.module.js';
+import { AssignmentMediaFileModule } from './modules/assignmentMediaFile/assignmentMediaFile.module.js';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CourseMediaFileModule } from './modules/courseMediaFile/courseMediaFile
     AssignmentModule,
     AttendanceModule,
     CourseMediaFileModule,
+    AssignmentMediaFileModule,
   ],
   controllers: [AppController],
   providers: [

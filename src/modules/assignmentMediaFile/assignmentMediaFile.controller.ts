@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Body,
   Controller,
@@ -8,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CourseMediaFileService } from './courseMediaFile.service.js';
+import { AssignmentMediaFileService } from './assignmentMediaFile.service.js';
 
 import { Role } from '../../common/enum/role.enum.js';
 import { Roles } from '../../common/decorator/roles.decorator.js';
@@ -21,11 +22,13 @@ import {
 } from '../../common/enum/fileOperation.enum.js';
 import { Enrolled } from '../../common/decorator/enrolled.decorator.js';
 import { MediaFileDto } from '../../common/dto/mediaFile.dto.js';
-@Controller('courses')
-export class CourseMediaFileController {
-  constructor(private readonly courseService: CourseMediaFileService) {}
+@Controller('assignments')
+export class AssignmentMediaFileController {
+  constructor(
+    private readonly assignmentMediaFileService: AssignmentMediaFileService,
+  ) {}
   @Roles(Role.ADMIN, Role.INSTRUCTOR)
-  @Owner(Resource.COURSE)
+  @Owner(Resource.ASSIGNMENT)
   @Post(':id/mediaFiles/:type')
   createSignedUrl(
     @Param('type', new ParseEnumPipe(FileOperation))
@@ -33,11 +36,11 @@ export class CourseMediaFileController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: MediaFileDto,
   ) {
-    return this.courseService.createSignedUrl(id, dto, type);
+    return this.assignmentMediaFileService.createSignedUrl(id, dto, type);
   }
 
   @Roles(Role.ADMIN, Role.INSTRUCTOR)
-  @Owner(Resource.COURSE)
+  @Owner(Resource.ASSIGNMENT)
   @Post(':id/mediaFiles/:type/confirm')
   confirmSignedUrl(
     @Param('type', new ParseEnumPipe(FileConfirmOperation))
@@ -45,15 +48,15 @@ export class CourseMediaFileController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: MediaFileDto,
   ) {
-    return this.courseService.confirmSignedUrl(id, dto, type);
+    return this.assignmentMediaFileService.confirmSignedUrl(id, dto, type);
   }
-  @Enrolled(Resource.COURSE)
-  @Owner(Resource.COURSE)
+  @Enrolled(Resource.ASSIGNMENT)
+  @Owner(Resource.ASSIGNMENT)
   @Get(':id/mediaFiles')
   findAll(
     @Param('id', ParseIntPipe) id: number,
     @Query() query: PaginationDto,
   ) {
-    return this.courseService.findAll(id, query.page, query.limit);
+    return this.assignmentMediaFileService.findAll(id, query.page, query.limit);
   }
 }
