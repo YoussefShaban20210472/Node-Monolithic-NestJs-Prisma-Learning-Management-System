@@ -1,4 +1,4 @@
 node_modules
-Storage
+/storage
 .env*
 dist
