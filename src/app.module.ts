@@ -13,6 +13,7 @@ import { AttendanceModule } from './modules/attendance/attendance.module.js';
 import { CourseMediaFileModule } from './modules/courseMediaFile/courseMediaFile.module.js';
 import { AssignmentMediaFileModule } from './modules/assignmentMediaFile/assignmentMediaFile.module.js';
 import { SubmissionModule } from './modules/submission/submission.module.js';
+import { SubmissionMediaFileModule } from './modules/submissionMediaFile/submissionMediaFile.module.js';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SubmissionModule } from './modules/submission/submission.module.js';
     CourseMediaFileModule,
     AssignmentMediaFileModule,
     SubmissionModule,
+    SubmissionMediaFileModule,
   ],
   controllers: [AppController],
   providers: [

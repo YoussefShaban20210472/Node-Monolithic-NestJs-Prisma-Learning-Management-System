@@ -1,12 +1,13 @@
 model Submission {
-  id           Int        @id @default(autoincrement())
+  id           Int                   @id @default(autoincrement())
   score        Int
-  submittedAt  DateTime   @default(now()) @map("submitted_at")
-  scoredAt     DateTime   @default(now()) @map("scored_at")
-  studentId    Int        @map("student_id")
-  student      User       @relation(fields: [studentId], references: [id])
-  assignmentId Int        @map("assignment_id")
-  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  submittedAt  DateTime              @default(now()) @map("submitted_at")
+  scoredAt     DateTime              @default(now()) @map("scored_at")
+  studentId    Int                   @map("student_id")
+  student      User                  @relation(fields: [studentId], references: [id])
+  assignmentId Int                   @map("assignment_id")
+  assignment   Assignment            @relation(fields: [assignmentId], references: [id])
+  mediaFiles   SubmissionMediaFile[]
 
   @@unique([assignmentId, studentId])
 }
