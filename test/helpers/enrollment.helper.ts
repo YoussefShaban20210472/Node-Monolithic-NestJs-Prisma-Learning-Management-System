@@ -66,6 +66,7 @@ export async function enrollStudentAndAccept(
   courseId: string,
   adminToken: string,
 ) {
+  await enrollStudentById(studentId, courseId, adminToken);
   await confirmEnrollment(studentId, courseId, adminToken, 'ACCEPTED');
 }
 export async function enrollStudentAndReject(
@@ -73,5 +74,6 @@ export async function enrollStudentAndReject(
   courseId: string,
   adminToken: string,
 ) {
+  await enrollStudentById(studentId, courseId, adminToken);
   await confirmEnrollment(studentId, courseId, adminToken, 'REJECTED');
 }

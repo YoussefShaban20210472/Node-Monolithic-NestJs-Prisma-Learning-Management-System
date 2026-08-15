@@ -20,4 +20,5 @@ model User {
   lessons     Lesson[]
   assignments Assignment[]
   attendances Attendance[]
+  submissions Submission[]
 }

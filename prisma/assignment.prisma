@@ -12,4 +12,5 @@ model Assignment {
   courseId     Int                   @map("course_id")
   course       Course                @relation(fields: [courseId], references: [id])
   mediaFiles   AssignmentMediaFile[]
+  submissions  Submission[]
 }

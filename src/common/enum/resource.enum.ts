@@ -3,4 +3,5 @@ export enum Resource {
   LESSON = 'LESSON',
   ASSIGNMENT = 'ASSIGNMENT',
   QUIZ = 'QUIZ',
+  Submission = 'Submission',
 }
